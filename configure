@@ -26461,7 +26461,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     if test "$wxUSE_WASM" = 1; then
         TOOLKIT=WASM
         TOOLKIT_INCLUDE=""
-        GUI_TK_LIBRARY="-lpng"
+        GUI_TK_LIBRARY=""
         LIBS="$LIBS -lz"
     fi
 
@@ -31278,9 +31278,9 @@ $as_echo "$ac_res" >&6; }
 _ACEOF
 
 
-    else
-      :
-      as_fn_error $? "wxMicroSleep() can't be implemented" "$LINENO" 5
+    # else
+    #   :
+    #   as_fn_error $? "wxMicroSleep() can't be implemented" "$LINENO" 5
 
     fi
   done
