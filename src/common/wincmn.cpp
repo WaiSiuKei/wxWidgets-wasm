@@ -3729,18 +3729,18 @@ wxString wxDumpWindow(const wxWindowBase* win)
     return s;
 }
 
-wxPoint wxGetMousePosition()
-{
-    wxPoint pt;
-    wxGetMousePosition(&pt.x, &pt.y);
-    return pt;
-}
-
-wxWindow* wxFindWindowAtPointer(wxPoint& pt)
-{
-    pt = wxGetMousePosition();
-    return wxFindWindowAtPoint(pt);
-}
+// wxPoint wxGetMousePosition()
+// {
+//     wxPoint pt;
+//     wxGetMousePosition(&pt.x, &pt.y);
+//     return pt;
+// }
+//
+// wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+// {
+//     pt = wxGetMousePosition();
+//     return wxFindWindowAtPoint(pt);
+// }
 
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------

@@ -29437,7 +29437,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     if test "$wxUSE_WASM" = 1; then
         TOOLKIT=WASM
         TOOLKIT_INCLUDE=""
-        GUI_TK_LIBRARY="-lpng"
+        GUI_TK_LIBRARY=""
         LIBS="$LIBS -lz"
     fi
 
