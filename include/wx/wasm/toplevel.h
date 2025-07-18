@@ -41,37 +41,37 @@ public:
 
     virtual ~wxTopLevelWindowWasm() { }
 
-    virtual wxPoint GetClientAreaOrigin() const wxOVERRIDE;
+    virtual wxPoint GetClientAreaOrigin() const override;
 
     // implement base class pure virtuals
-    virtual void Maximize(bool WXUNUSED(maximize) = true) wxOVERRIDE { }
-    virtual bool IsMaximized() const wxOVERRIDE { return false; }
-    virtual bool IsAlwaysMaximized() const wxOVERRIDE { return IsMainFrame(); }
-    virtual void Iconize(bool WXUNUSED(iconize) = true) wxOVERRIDE { }
-    virtual bool IsIconized() const wxOVERRIDE { return false; }
-    virtual void Restore() wxOVERRIDE { }
+    virtual void Maximize(bool WXUNUSED(maximize) = true) override { }
+    virtual bool IsMaximized() const override { return false; }
+    virtual bool IsAlwaysMaximized() const override { return IsMainFrame(); }
+    virtual void Iconize(bool WXUNUSED(iconize) = true) override { }
+    virtual bool IsIconized() const override { return false; }
+    virtual void Restore() override { }
 
-    virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
+    virtual void SetIcons(const wxIconBundle& icons) override;
 
-    virtual void ShowWithoutActivating() wxOVERRIDE;
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
-    virtual bool IsFullScreen() const wxOVERRIDE;
+    virtual void ShowWithoutActivating() override;
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) override;
+    virtual bool IsFullScreen() const override;
 
-    virtual bool IsActive() wxOVERRIDE { return m_isActive; }
+    virtual bool IsActive() override { return m_isActive; }
 
-    virtual void SetTitle(const wxString &title) wxOVERRIDE;
-    virtual wxString GetTitle() const wxOVERRIDE { return m_title; }
+    virtual void SetTitle(const wxString &title) override;
+    virtual wxString GetTitle() const override { return m_title; }
 
-    virtual wxString GetCSSClassList() const wxOVERRIDE {
+    virtual wxString GetCSSClassList() const override {
       return wxNonOwnedWindow::GetCSSClassList() + " toplevel";
     }
 
 protected:
-    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
-    virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
+    virtual void DoGetClientSize(int *width, int *height) const override;
+    virtual void DoSetClientSize(int width, int height) override;
 
-    virtual void DoScreenToClient(int *x, int *y) const wxOVERRIDE;
-    virtual void DoClientToScreen(int *x, int *y) const wxOVERRIDE;
+    virtual void DoScreenToClient(int *x, int *y) const override;
+    virtual void DoClientToScreen(int *x, int *y) const override;
 
     virtual bool HasTitleBar() const;
 

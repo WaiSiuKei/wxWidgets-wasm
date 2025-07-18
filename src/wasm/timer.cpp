@@ -35,7 +35,7 @@ bool wxWasmTimerImpl::Start(int millisecs, bool oneShot)
         return false;
     }
 
-    wxASSERT_MSG(m_callbackFunc == NULL, wxT("timer should be stopped"));
+    wxASSERT_MSG(m_callbackFunc == nullptr, wxT("timer should be stopped"));
 
     // Data gets freed by callback.
     m_callbackFunc = new TimerCallbackFunc(this);
@@ -47,11 +47,11 @@ bool wxWasmTimerImpl::Start(int millisecs, bool oneShot)
 
 void wxWasmTimerImpl::Stop()
 {
-    wxASSERT_MSG(m_callbackFunc != NULL, wxT("timer should be running"));
+    wxASSERT_MSG(m_callbackFunc != nullptr, wxT("timer should be running"));
 
     // Set a flag that tells the callback to cancel when it fires.
     m_callbackFunc->Cancel();
-    m_callbackFunc = NULL;
+    m_callbackFunc = nullptr;
 }
 
 void wxWasmTimerImpl::ScheduleFirstInterval()

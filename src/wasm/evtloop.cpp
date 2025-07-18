@@ -108,3 +108,13 @@ int wxGUIEventLoop::DoRun()
 
     return 0;
 }
+
+void wxGUIEventLoop::DoStop(int WXUNUSED(rc))
+{
+    wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not started") );
+
+    // We don't actually stop the loop, just set the exit flag.
+    m_shouldExit = true;
+
+    emscripten_cancel_main_loop();
+}

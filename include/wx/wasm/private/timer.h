@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/wasm/private/timer.h
-// Purpose:     
+// Purpose:
 // Author:      Adam Hilss
 // Copyright:   (c) 2019 Adam Hilss
 // Licence:     LGPL v2
@@ -24,11 +24,11 @@ class WXDLLIMPEXP_CORE wxWasmTimerImpl : public wxTimerImpl
 public:
     wxWasmTimerImpl(wxTimer* timer)
       : wxTimerImpl(timer),
-        m_callbackFunc(NULL) { }
+        m_callbackFunc(nullptr) { }
 
     virtual bool Start(int millisecs = -1, bool oneShot = false);
     virtual void Stop();
-    virtual bool IsRunning() const { return m_callbackFunc != NULL; }
+    virtual bool IsRunning() const { return m_callbackFunc != nullptr; }
 
 protected:
     void ScheduleFirstInterval();

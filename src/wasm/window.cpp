@@ -22,11 +22,11 @@
 #define TRACE_WINDOW wxT("window")
 #define TRACE_PAINT wxT("paint")
 
-wxWindow *g_mouseWindow = NULL;
+wxWindow *g_mouseWindow = nullptr;
 
-static wxWindowWasm *gs_focusWindow = NULL;
-static wxWindowWasm *gs_nextFocusWindow = NULL;
-static wxWindowWasm *gs_captureWindow = NULL;
+static wxWindowWasm *gs_focusWindow = nullptr;
+static wxWindowWasm *gs_nextFocusWindow = nullptr;
+static wxWindowWasm *gs_captureWindow = nullptr;
 
 // ----------------------------------------------------------------------------
 // wxWindowWasm
@@ -61,15 +61,15 @@ wxWindowWasm::~wxWindowWasm()
 
     if (g_mouseWindow == this)
     {
-        g_mouseWindow = NULL;
+        g_mouseWindow = nullptr;
     }
     if (gs_focusWindow == this)
     {
-        gs_focusWindow = NULL;
+        gs_focusWindow = nullptr;
     }
     if (gs_nextFocusWindow == this)
     {
-        gs_nextFocusWindow = NULL;
+        gs_nextFocusWindow = nullptr;
     }
     if (gs_captureWindow == this)
     {
@@ -131,8 +131,8 @@ void wxWindowWasm::Raise()
     if (GetParent())
     {
         wxWindowList& children = GetParent()->GetChildren();
-        children.DeleteObject(this);
-        children.Append(this);
+        children.DeleteObject(static_cast<wxWindow*>(this));
+        children.Append(static_cast<wxWindow*>(this));
     }
 }
 
@@ -141,8 +141,8 @@ void wxWindowWasm::Lower()
     if (GetParent())
     {
         wxWindowList& children = GetParent()->GetChildren();
-        children.DeleteObject(this);
-        children.Insert(this);
+        children.DeleteObject(static_cast<wxWindow*>(this));
+        children.Insert(static_cast<wxWindow*>(this));
     }
 }
 
@@ -178,11 +178,11 @@ void wxWindowWasm::SetFocus()
 
     wxWindowWasm *prevFocusWindow = gs_focusWindow;
 
-    if (gs_focusWindow != NULL)
+    if (gs_focusWindow != nullptr)
     {
         gs_nextFocusWindow = this;
         gs_focusWindow->KillFocus();
-        gs_nextFocusWindow = NULL;
+        gs_nextFocusWindow = nullptr;
     }
 
     gs_focusWindow = this;
@@ -208,7 +208,7 @@ void wxWindowWasm::KillFocus()
     wxCHECK_RET(gs_focusWindow == this,
                 "killing focus on window that doesn't have it" );
 
-    gs_focusWindow = NULL;
+    gs_focusWindow = nullptr;
 
     if ( m_isBeingDeleted )
         return; // don't send any events from dtor
@@ -364,7 +364,7 @@ bool wxWindowWasm::SetCursor(const wxCursor &cursor)
 
     bool mouseInsideWindow = GetScreenRect().Contains(wxGetMousePosition());
 
-    if (GetCapture() == NULL && mouseInsideWindow)
+    if (GetCapture() == nullptr && mouseInsideWindow)
     {
         if (cursor.IsOk())
         {
@@ -382,14 +382,14 @@ bool wxWindowWasm::SetCursor(const wxCursor &cursor)
 int wxWindowWasm::GetCharWidth() const
 {
     wxCoord charWidth;
-    m_font.GetCharSize(&charWidth, NULL);
+    m_font.GetCharSize(&charWidth, nullptr);
     return charWidth;
 }
 
 int wxWindowWasm::GetCharHeight() const
 {
     wxCoord charHeight;
-    m_font.GetCharSize(NULL, &charHeight);
+    m_font.GetCharSize(nullptr, &charHeight);
     return charHeight;
 }
 
@@ -617,7 +617,7 @@ void wxWindowWasm::DoMoveWindow(int x, int y, int width, int height)
 
         wxWindow *parent = GetParent();
 
-        if (parent != NULL)
+        if (parent != nullptr)
         {
             parent->RefreshRect(oldPos);
             parent->RefreshRect(newPos);
@@ -642,7 +642,7 @@ void wxWindowWasm::DoReleaseMouse()
 {
     wxASSERT_MSG(gs_captureWindow == this, wxT("attempt to release mouse, but this window hasn't captured it"));
 
-    gs_captureWindow = NULL;
+    gs_captureWindow = nullptr;
 }
 
 void wxWindowWasm::DoThaw()

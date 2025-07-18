@@ -49,7 +49,7 @@ wxApp::~wxApp()
 void wxApp::Paint()
 {
     wxWindow *topWindow = GetTopWindow();
-    wxASSERT(topWindow != NULL);
+    wxASSERT(topWindow != nullptr);
 
     wxWindowList::iterator windowIter;
 
@@ -114,7 +114,7 @@ void wxApp::GetMouseState(wxMouseState *mouseState)
 wxWindow *wxApp::GetMouseWindow(const wxPoint& position) const
 {
     wxWindow *captureWindow = wxWindow::GetCapture();
-    if (captureWindow != NULL)
+    if (captureWindow != nullptr)
     {
         return captureWindow;
     }
@@ -140,7 +140,7 @@ bool wxApp::HandleKeyEvent(wxKeyEvent *event)
     wxWindow *window = wxWindow::FindFocus();
     //printf("KeyEvent: window %p\n", window);
 
-    if (window != NULL && window->IsEnabled())
+    if (window != nullptr && window->IsEnabled())
     {
         event->SetEventObject(window);
         event->SetId(window->GetId());
@@ -177,8 +177,8 @@ void wxApp::SendMouseEventToWindow(wxMouseEvent *event, wxWindow *window)
 {
     if (window->IsEnabled())
     {
-        wxASSERT(window != NULL);
-        wxASSERT(event != NULL);
+        wxASSERT(window != nullptr);
+        wxASSERT(event != nullptr);
 
         wxPoint mousePosition = event->GetPosition();
         wxPoint clientPosition = window->ScreenToClient(mousePosition);
@@ -225,7 +225,7 @@ void wxApp::HandleMouseEvent(wxMouseEvent *event)
 
         if (g_mouseWindow != GetMouseWindow(mousePosition))
         {
-            if (g_mouseWindow != NULL)
+            if (g_mouseWindow != nullptr)
             {
                 wxMouseEvent leaveEvent(*event);
                 leaveEvent.SetEventType(wxEVT_LEAVE_WINDOW);
@@ -236,7 +236,7 @@ void wxApp::HandleMouseEvent(wxMouseEvent *event)
             // wxEVT_LEAVE_WINDOW processing.
             g_mouseWindow = GetMouseWindow(mousePosition);
 
-            if (g_mouseWindow != NULL)
+            if (g_mouseWindow != nullptr)
             {
                 wxCursor cursor = g_mouseWindow->GetCursor();
                 if (cursor.IsOk())
@@ -253,7 +253,7 @@ void wxApp::HandleMouseEvent(wxMouseEvent *event)
             }
         }
 
-        if (g_mouseWindow != NULL)
+        if (g_mouseWindow != nullptr)
         {
             wxEventType eventType = event->GetEventType();
             // Enter window and leave window events are handled above.
@@ -262,7 +262,7 @@ void wxApp::HandleMouseEvent(wxMouseEvent *event)
                 SendMouseEventToWindow(event, g_mouseWindow);
             }
 
-            if (g_mouseWindow != NULL &&
+            if (g_mouseWindow != nullptr &&
                 g_mouseWindow == GetMouseWindow(mousePosition) &&
                 (eventType == wxEVT_LEFT_DOWN ||
                  eventType == wxEVT_RIGHT_DOWN ||
@@ -283,7 +283,7 @@ void wxApp::HandleMouseWheelEvent(wxMouseEvent *event)
     event->SetPosition(mousePosition);
     wxWindow *window = GetMouseWindow(mousePosition);
 
-    if (window != NULL)
+    if (window != nullptr)
     {
         SendMouseEventToWindow(event, window);
     }
@@ -298,7 +298,7 @@ void wxApp::HandleSizeEvent(const wxSizeEvent &event)
     GetDisplay()->UpdateScaleFactor();
 
     wxWindow *topWindow = GetTopWindow();
-    if (topWindow != NULL)
+    if (topWindow != nullptr)
     {
         //printf("SetSize %d %d\n", newSize.GetWidth(), newSize.GetHeight());
         topWindow->SetSize(0, 0, newSize.GetWidth(), newSize.GetHeight());
@@ -311,7 +311,7 @@ void wxApp::HandleActivateEvent(wxActivateEvent *event)
     //printf("HandleActivateEvent\n");
     wxWindow *topWindow = GetTopWindow();
 
-    if (topWindow != NULL)
+    if (topWindow != nullptr)
     {
         event->SetId(topWindow->GetId());
         event->SetEventObject(topWindow);
@@ -324,7 +324,7 @@ void wxApp::HandleCloseEvent(wxCloseEvent *event)
     //printf("close message\n");
     wxWindow *topWindow = GetTopWindow();
 
-    if (topWindow != NULL)
+    if (topWindow != nullptr)
     {
         event->SetId(topWindow->GetId());
         event->SetEventObject(topWindow);
@@ -366,7 +366,7 @@ public:
     {
         wxFAIL_MSG("Monitoring FDs in the main loop is not supported");
 
-        return NULL;
+        return nullptr;
     }
 };
 

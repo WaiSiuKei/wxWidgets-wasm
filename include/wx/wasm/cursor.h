@@ -29,10 +29,13 @@ public:
     wxCursor(const wxString& filename,
              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
+    wxCursor(const wxBitmap& bitmap, const wxPoint& hotSpot)
+        : wxCursor(bitmap, hotSpot.x, hotSpot.y) { }
+    wxCursor(const wxBitmap& bitmap, int hotSpotX, int hotSpotY);
 #endif
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
+             const char maskBits[] = nullptr);
     wxCursor(int cursorType);
     virtual ~wxCursor() {}
 

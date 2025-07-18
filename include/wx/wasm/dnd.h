@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/wasm/dnd.h
-// Purpose:     
+// Purpose:
 // Author:      Adam Hilss
 // Copyright:   (c) 2019 Adam Hilss
 // Licence:     LGPL v2
@@ -33,7 +33,7 @@
 class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
-    wxDropSource(wxWindow *win = NULL,
+    wxDropSource(wxWindow *win = nullptr,
                  const wxCursor &copy = wxNullCursor,
                  const wxCursor &move = wxNullCursor,
                  const wxCursor &none = wxNullCursor);
@@ -60,7 +60,7 @@ private:
     bool HandleMouseEvent(wxMouseEvent* event, wxDragResult* result);
 
     int m_dropFlags;
-    
+
     wxWindow *m_overWindow;        // Current mouse over window
 
     wxPoint m_startPosition;       // Mouse position when drag started
@@ -75,7 +75,7 @@ private:
 class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
 {
 public:
-    wxDropTarget(wxDataObject *dataObject = NULL);
+    wxDropTarget(wxDataObject *dataObject = nullptr);
 
     virtual bool OnDrop(wxCoord x, wxCoord y);
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);

@@ -101,7 +101,6 @@ void wxCaret::InitGeneric()
     m_yOld = -1;
     if (m_width && m_height)
         m_bmpUnderCaret.CreateScaled(m_width, m_height, wxBITMAP_SCREEN_DEPTH, wxContentScaleFactor());
-#endif
 }
 
 wxCaret::~wxCaret()
@@ -241,7 +240,7 @@ void wxCaret::Refresh()
 
         return;
     }
-#else
+
     dcWin.SetPen(*wxTRANSPARENT_PEN);
     if ( m_blinkedOut )
     {
@@ -290,7 +289,6 @@ void wxCaret::Refresh()
         DoDraw(&dcWin, GetWindow());
     }
 */
-#endif
 }
 
 void wxCaret::DoDraw(wxDC *dc, wxWindow* win)

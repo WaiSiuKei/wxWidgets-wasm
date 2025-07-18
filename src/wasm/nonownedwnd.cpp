@@ -119,7 +119,7 @@ void wxNonOwnedWindow::Raise()
          ++windowIter)
     {
         wxWindow *window = *windowIter;
-        if (window->GetParent() != NULL &&
+        if (window->GetParent() != nullptr &&
             window->GetParent()->GetTopLevelWindow() == this)
         {
             window->Raise();
@@ -134,7 +134,7 @@ void wxNonOwnedWindow::Lower()
          ++windowIter)
     {
         wxWindow *window = *windowIter;
-        if (window->GetParent() != NULL &&
+        if (window->GetParent() != nullptr &&
             window->GetParent()->GetTopLevelWindow() == this)
         {
             window->Lower();

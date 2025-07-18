@@ -28,9 +28,9 @@ public:
         m_style = wxPENSTYLE_SOLID;
         m_join = wxJOIN_ROUND;
         m_cap = wxCAP_ROUND;
-        m_stipple = NULL;
+        m_stipple = nullptr;
         m_dashCount = 0;
-        m_dash = NULL;
+        m_dash = nullptr;
     }
 
     wxPenRefData(const wxPenRefData& data)
@@ -41,7 +41,7 @@ public:
         m_style = data.m_style;
         m_join = data.m_join;
         m_cap = data.m_cap;
-        m_stipple = data.m_stipple ? new wxBitmap(*data.m_stipple) : NULL;
+        m_stipple = data.m_stipple ? new wxBitmap(*data.m_stipple) : nullptr;
         m_dashCount = data.m_dashCount;
         m_dash = data.m_dash;
     }
@@ -277,7 +277,7 @@ wxPenJoin wxPen::GetJoin() const
 
 wxBitmap *wxPen::GetStipple() const
 {
-    wxCHECK_MSG(IsOk(), NULL, wxT("invalid pen"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid pen"));
 
     return M_PENDATA->GetStipple();
 }
@@ -299,7 +299,7 @@ int wxPen::GetDashCount() const
 
 wxDash *wxPen::GetDash() const
 {
-    wxCHECK_MSG(IsOk(), NULL, wxT("invalid pen"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid pen"));
 
     return const_cast<wxDash*>(M_PENDATA->GetDash());
 }

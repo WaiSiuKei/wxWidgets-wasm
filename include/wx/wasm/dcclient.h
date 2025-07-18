@@ -21,7 +21,7 @@ public:
     wxWindowDCImpl(wxDC *owner, wxWindow *win, bool isClient = false);
     virtual ~wxWindowDCImpl(void);
 
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxWindowDCImpl);
@@ -39,6 +39,7 @@ class WXDLLIMPEXP_CORE wxClientDCImpl: public wxWindowDCImpl
 public:
     wxClientDCImpl(wxDC *owner, wxWindow *win);
     virtual ~wxClientDCImpl(void);
+    static bool CanBeUsedForDrawing(const wxWindow* window);
 
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxClientDCImpl);

@@ -55,7 +55,7 @@ public:
     inline BitmapDataSource GetDataSource() const { return m_dataSource; }
     unsigned char *GetData() const { return m_bitmap; }
 
-    inline bool HasMask() const { return m_mask != NULL; }
+    inline bool HasMask() const { return m_mask != nullptr; }
 
     void SyncToCpp();
     void SyncToJs();
@@ -84,8 +84,8 @@ protected:
 wxBitmapRefData::wxBitmapRefData(int width, int height, int depth, double scale)
 {
     m_jsId = -1;
-    m_bitmap = NULL;
-    m_mask = NULL;
+    m_bitmap = nullptr;
+    m_mask = nullptr;
     m_width = width;
     m_height = height;
     m_depth = depth;
@@ -110,7 +110,7 @@ wxBitmapRefData::~wxBitmapRefData()
 
 void wxBitmapRefData::AllocateData()
 {
-    if (m_bitmap == NULL)
+    if (m_bitmap == nullptr)
     {
         int size = GetDataSize();
         m_bitmap = new unsigned char[size];
@@ -160,7 +160,7 @@ void wxBitmapRefData::SyncToCpp()
             break;
         case BITMAP_DATA_SOURCE_JS:
             AllocateData();
-            wxASSERT_MSG(m_bitmap != NULL, wxT("Data not allocated"));
+            wxASSERT_MSG(m_bitmap != nullptr, wxT("Data not allocated"));
 
             if (m_jsId != -1)
             {
@@ -194,7 +194,7 @@ void wxBitmapRefData::SyncToJs()
             }
             else
             {
-                compositeData = NULL;
+                compositeData = nullptr;
                 data = m_bitmap;
             }
 
@@ -233,7 +233,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
 wxMask::wxMask()
     : m_dataSize(0),
-      m_data(NULL)
+      m_data(nullptr)
 {
 }
 
@@ -248,7 +248,7 @@ wxMask::wxMask(const wxMask& mask)
     }
     else
     {
-        m_data = NULL;
+        m_data = nullptr;
     }
 
     m_bitmap = mask.m_bitmap;
@@ -256,7 +256,7 @@ wxMask::wxMask(const wxMask& mask)
 
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
     : m_dataSize(0),
-      m_data(NULL)
+      m_data(nullptr)
 {
     Create(bitmap, colour);
 }
@@ -264,7 +264,7 @@ wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 #if wxUSE_PALETTE
 wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
     : m_dataSize(0),
-      m_data(NULL)
+      m_data(nullptr)
 {
     Create(bitmap, paletteIndex);
 }
@@ -272,7 +272,7 @@ wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
 
 wxMask::wxMask(const wxBitmap& bitmap)
     : m_dataSize(0),
-      m_data(NULL)
+      m_data(nullptr)
 {
     Create(bitmap);
 }
@@ -295,7 +295,7 @@ uint32_t* wxMask::GetData() const
 void wxMask::FreeData()
 {
     delete [] m_data;
-    m_data = NULL;
+    m_data = nullptr;
 }
 
 bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
@@ -388,6 +388,12 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     wxASSERT_MSG(retval, wxT("error creating bitmap"));
 }
 
+wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
+{
+    bool retval = Create(image, -1, dc.GetContentScaleFactor());
+    wxASSERT_MSG(retval, wxT("error creating bitmap"));
+}
+
 bool wxBitmap::Create(int width, int height, int depth)
 {
     return CreateScaled(width, height, depth, 1.0);
@@ -414,7 +420,7 @@ bool wxBitmap::Create(const char bits[], int width, int height, int depth)
     int dstBytesPerRow = GetBytesPerRow();
 
     unsigned char *data = static_cast<unsigned char*>(BeginRawAccess());
-    wxASSERT_MSG(data != NULL, wxT("bitmap not allocated"));
+    wxASSERT_MSG(data != nullptr, wxT("bitmap not allocated"));
 
     const char *srcPtr = bits;
     unsigned char *dstPtr = data;
@@ -482,7 +488,7 @@ bool wxBitmap::Create(const wxImage& image, int depth, double scale)
     }
 
     unsigned char *data = static_cast<unsigned char *>(BeginRawAccess());
-    if (data == NULL)
+    if (data == nullptr)
     {
         return false;
     }
@@ -534,7 +540,7 @@ wxImage wxBitmap::ConvertToImage() const
     }
 
     unsigned char *data = static_cast<unsigned char *>(BeginRawAccess());
-    if (data == NULL)
+    if (data == nullptr)
     {
         return wxNullImage;
     }
@@ -612,7 +618,7 @@ double wxBitmap::GetScaledHeight() const
 
 wxMask *wxBitmap::GetMask() const
 {
-    wxCHECK_MSG(IsOk(), NULL, wxT("invalid bitmap"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid bitmap"));
     return M_BITMAPDATA->m_mask;
 }
 
@@ -621,7 +627,7 @@ void wxBitmap::SetMask(wxMask *mask)
     AllocExclusive();
 
     delete M_BITMAPDATA->m_mask;
-    M_BITMAPDATA->m_mask = NULL;
+    M_BITMAPDATA->m_mask = nullptr;
 
     if (mask->GetDataSize() != GetScaledWidth() * GetScaledHeight())
     {
@@ -704,8 +710,8 @@ bool wxBitmap::LoadFile(const wxString &WXUNUSED(filename), wxBitmapType WXUNUSE
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-    wxCHECK_MSG(IsOk(), NULL, wxT("invalid bitmap"));
-    wxCHECK_MSG(bpp == GetDepth(), NULL, wxT("wrong depth"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid bitmap"));
+    wxCHECK_MSG(bpp == GetDepth(), nullptr, wxT("wrong depth"));
 
     data.m_width = GetScaledWidth();
     data.m_height = GetScaledHeight();
@@ -721,7 +727,7 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 
 void *wxBitmap::BeginRawAccess() const
 {
-    wxCHECK_MSG(IsOk(), NULL, wxT("invalid bitmap"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid bitmap"));
 
     M_BITMAPDATA->SyncToCpp();
 
@@ -752,7 +758,7 @@ wxPalette *wxBitmap::GetPalette() const
 {
     // TODO: implement
     wxFAIL_MSG(wxT("GetPalette is not implemented"));
-    return NULL;
+    return nullptr;
 }
 
 void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
@@ -813,7 +819,7 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
         newRef->SyncToCpp();
         newRef->m_jsId = -1;
     }
-    else if (oldRef->m_bitmap != NULL)
+    else if (oldRef->m_bitmap != nullptr)
     {
         int size = oldRef->GetDataSize();
         newRef->m_bitmap = new unsigned char[size];
@@ -822,7 +828,7 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 
     newRef->m_dataSource = BITMAP_DATA_SOURCE_CPP;
 
-    if (oldRef->m_mask != NULL)
+    if (oldRef->m_mask != nullptr)
     {
         newRef->m_mask = new wxMask(*oldRef->m_mask);
     }

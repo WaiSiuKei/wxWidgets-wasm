@@ -40,49 +40,49 @@ public:
   // ------------------------------------------
 
   // path management
-  virtual void SetPath(const wxString& strPath) wxOVERRIDE;
-  virtual const wxString& GetPath() const wxOVERRIDE { return m_strPath; }
+  virtual void SetPath(const wxString& strPath) override;
+  virtual const wxString& GetPath() const override { return m_strPath; }
 
   // entry/subgroup info
   // enumerate all of them
-  virtual bool GetFirstGroup(wxString& str, long& lIndex) const wxOVERRIDE;
-  virtual bool GetNextGroup (wxString& str, long& lIndex) const wxOVERRIDE;
-  virtual bool GetFirstEntry(wxString& str, long& lIndex) const wxOVERRIDE;
-  virtual bool GetNextEntry (wxString& str, long& lIndex) const wxOVERRIDE;
+  virtual bool GetFirstGroup(wxString& str, long& lIndex) const override;
+  virtual bool GetNextGroup (wxString& str, long& lIndex) const override;
+  virtual bool GetFirstEntry(wxString& str, long& lIndex) const override;
+  virtual bool GetNextEntry (wxString& str, long& lIndex) const override;
 
   // tests for existence
-  virtual bool HasGroup(const wxString& strName) const wxOVERRIDE;
-  virtual bool HasEntry(const wxString& strName) const wxOVERRIDE;
+  virtual bool HasGroup(const wxString& strName) const override;
+  virtual bool HasEntry(const wxString& strName) const override;
 
   // get number of entries/subgroups in the current group, with or without
   // it's subgroups
-  virtual size_t GetNumberOfEntries(bool bRecursive = false) const wxOVERRIDE;
-  virtual size_t GetNumberOfGroups(bool bRecursive = false) const wxOVERRIDE;
+  virtual size_t GetNumberOfEntries(bool bRecursive = false) const override;
+  virtual size_t GetNumberOfGroups(bool bRecursive = false) const override;
 
-  virtual bool Flush(bool WXUNUSED(bCurrentOnly) = false) wxOVERRIDE { return true; }
+  virtual bool Flush(bool WXUNUSED(bCurrentOnly) = false) override { return true; }
 
   // rename
-  virtual bool RenameEntry(const wxString& oldName, const wxString& newName) wxOVERRIDE;
-  virtual bool RenameGroup(const wxString& oldName, const wxString& newName) wxOVERRIDE;
+  virtual bool RenameEntry(const wxString& oldName, const wxString& newName) override;
+  virtual bool RenameGroup(const wxString& oldName, const wxString& newName) override;
 
   // delete
-  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true) wxOVERRIDE;
-  virtual bool DeleteGroup(const wxString& key) wxOVERRIDE;
-  virtual bool DeleteAll() wxOVERRIDE;
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true) override;
+  virtual bool DeleteGroup(const wxString& key) override;
+  virtual bool DeleteAll() override;
 
 protected:
-  virtual bool DoReadString(const wxString& key, wxString *pstr) const wxOVERRIDE;
-  virtual bool DoReadLong(const wxString& key, long *pl) const wxOVERRIDE;
-  virtual bool DoReadBool(const wxString& key, bool *pb) const wxOVERRIDE;
+  virtual bool DoReadString(const wxString& key, wxString *pstr) const override;
+  virtual bool DoReadLong(const wxString& key, long *pl) const override;
+  virtual bool DoReadBool(const wxString& key, bool *pb) const override;
 #if wxUSE_BASE64
-  virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const wxOVERRIDE;
+  virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const override;
 #endif // wxUSE_BASE64
 
-  virtual bool DoWriteString(const wxString& key, const wxString& str) wxOVERRIDE;
-  virtual bool DoWriteLong(const wxString& key, long l) wxOVERRIDE;
-  virtual bool DoWriteBool(const wxString& key, bool b) wxOVERRIDE;
+  virtual bool DoWriteString(const wxString& key, const wxString& str) override;
+  virtual bool DoWriteLong(const wxString& key, long l) override;
+  virtual bool DoWriteBool(const wxString& key, bool b) override;
 #if wxUSE_BASE64
-  virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) wxOVERRIDE;
+  virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) override;
 #endif // wxUSE_BASE64
 
   wxString MakeEntryKey(const wxString& key) const;

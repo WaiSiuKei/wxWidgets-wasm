@@ -6196,7 +6196,7 @@ public:
     bool GetControl() const;
     bool GetAlt() const;
 
-    wxNODISCARD virtual wxEvent* Clone() const override { return new wxStyledTextEvent(*this); }
+    virtual wxEvent* Clone() const override { return new wxStyledTextEvent(*this); }
 
 #ifndef SWIG
 private:

@@ -1162,7 +1162,7 @@ void wxWasmRenderer::DrawRadioButtonBitmap(wxDC& dc,
     DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT), rect);
 
     dc.SetPen(m_penDarkGrey);
-    dc.SetBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT)); 
+    dc.SetBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT));
     // draw the normal border
     dc.DrawCircle(xRight/2,yBottom/2,radius);
 
@@ -1972,13 +1972,13 @@ wxString wxWasmRenderer::RenderAccelString(const wxString& accel) const
             if ( !skip && ( (label[n] == '+') || (label[n] == '-') ) )
             {
                 if ( CompareAccelString(current, wxTRANSLATE("ctrl")) )
-                    modifiers += wxString::FromUTF8("\xE2\x8C\x98"); 
+                    modifiers += wxString::FromUTF8("\xE2\x8C\x98");
                 else if ( CompareAccelString(current, wxTRANSLATE("alt")) )
-                    modifiers += wxString::FromUTF8("\xE2\x8C\xA5"); 
+                    modifiers += wxString::FromUTF8("\xE2\x8C\xA5");
                 else if ( CompareAccelString(current, wxTRANSLATE("shift")) )
-                    modifiers += wxString::FromUTF8("\xE2\x87\xA7"); 
+                    modifiers += wxString::FromUTF8("\xE2\x87\xA7");
                 else if ( CompareAccelString(current, wxTRANSLATE("rawctrl")) )
-                    modifiers += wxString::FromUTF8("\xE2\x8C\x83"); 
+                    modifiers += wxString::FromUTF8("\xE2\x8C\x83");
                 else if ( CompareAccelString(current, wxTRANSLATE("num ")) )
                 {
                     // This isn't really a modifier, but is part of the name of keys
@@ -2082,7 +2082,7 @@ wxMenuGeometryInfo *wxWasmRenderer::GetMenuGeometry(wxWindow *win,
             {
                 widthAccelMax = widthAccel;
             }
-    
+
             if ( item->GetSubMenu() && MENU_ARROW_WIDTH > widthAccelMax ) {
                 widthAccelMax = MENU_ARROW_WIDTH;
             }
@@ -2819,11 +2819,11 @@ bool wxWasmInputHandler::HandleMouseMove(wxInputConsumer *control,
 {
     if ( event.Entering() )
     {
-        control->GetInputWindow()->SetCurrent(true);
+        control->GetInputWindow()->WXMakeCurrent(true);
     }
     else if ( event.Leaving() )
     {
-        control->GetInputWindow()->SetCurrent(false);
+        control->GetInputWindow()->WXMakeCurrent(false);
     }
     else
     {

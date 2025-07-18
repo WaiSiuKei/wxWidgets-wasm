@@ -23,7 +23,7 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
-    virtual wxString GetCSSClassList() const wxOVERRIDE {
+    virtual wxString GetCSSClassList() const override {
       return wxNonOwnedWindow::GetCSSClassList() + " popup";
     }
 

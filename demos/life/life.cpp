@@ -34,7 +34,7 @@
 // resources
 // --------------------------------------------------------------------------
 
-#ifndef wxHAS_IMAGES_IN_RESOURCES || defined(__WXWASM__)
+#if !defined(wxHAS_IMAGES_IN_RESOURCES) || defined(__WXWASM__)
     // application icon
     #include "mondrian.xpm"
 

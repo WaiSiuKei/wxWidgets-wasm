@@ -26,12 +26,12 @@ public:
     {
         m_colour = colour;
         m_style = style;
-        m_stipple = NULL;
+        m_stipple = nullptr;
     }
 
     wxBrushRefData(const wxBitmap& stipple)
     {
-        m_stipple = NULL;
+        m_stipple = nullptr;
         DoSetStipple(stipple);
     }
 
@@ -45,7 +45,7 @@ public:
     {
         m_colour = data.m_colour;
         m_style = data.m_style;
-        m_stipple = data.m_stipple ? new wxBitmap(*data.m_stipple) : NULL;
+        m_stipple = data.m_stipple ? new wxBitmap(*data.m_stipple) : nullptr;
     }
 
     bool operator==(const wxBrushRefData& data) const
@@ -133,7 +133,7 @@ wxColour wxBrush::GetColour() const
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    wxCHECK_MSG(IsOk(), NULL, wxT("invalid brush"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid brush"));
 
     return M_BRUSHDATA->GetStipple();
 }

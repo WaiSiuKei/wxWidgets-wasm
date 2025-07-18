@@ -510,7 +510,7 @@ bool wxLocale::Init(int lang, int flags)
 /*static*/
 int wxLocale::GetSystemLanguage()
 {
-#elif defined(__WXWASM__)
+#if defined(__WXWASM__)
 //     const int langBufferSize = 16;
 //     char langBuffer[langBufferSize];
 //
@@ -526,6 +526,7 @@ int wxLocale::GetSystemLanguage()
     // based on the default user locale (and not the preferred UI language).
     // Therefore we need to call wxUILocale::GetSystemLocale() here.
     return wxUILocale::GetSystemLocale();
+#endif
 }
 
 // ----------------------------------------------------------------------------

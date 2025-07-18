@@ -1708,7 +1708,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="WASM_LOWLEVEL_SRC" hints="files">
     src/generic/caret.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/paletteg.cpp
     src/generic/regiong.cpp

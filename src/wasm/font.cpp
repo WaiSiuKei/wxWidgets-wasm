@@ -243,24 +243,24 @@ void wxFontRefData::GetTextExtent(const wxString &string,
 
     const char *s = string.utf8_str();
 
-    if (x != NULL)
+    if (x != nullptr)
     {
         *x = EM_ASM_INT({
             return measureText(UTF8ToString($0), UTF8ToString($1));
         }, s, fontString);
     }
 
-    if (y != NULL)
+    if (y != nullptr)
     {
         *y = static_cast<int>(round(1.6 * m_nativeFontInfo.GetFractionalPointSize()));
     }
 
-    if (descent != NULL)
+    if (descent != nullptr)
     {
         *descent = 0;
     }
 
-    if (externalLeading != NULL)
+    if (externalLeading != nullptr)
     {
         *externalLeading = 0;
     }
@@ -392,7 +392,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    wxCHECK_MSG(IsOk(), NULL, wxT("invalid font"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid font"));
     return &M_FONTINFO;
 }
 
@@ -476,5 +476,5 @@ void wxFont::GetTextExtent(const wxString &string,
 
 void wxFont::GetCharSize(wxCoord *x, wxCoord *y) const
 {
-    M_FONTDATA->GetTextExtent(wxT("M"), x, y, NULL, NULL);
+    M_FONTDATA->GetTextExtent(wxT("M"), x, y, nullptr, nullptr);
 }

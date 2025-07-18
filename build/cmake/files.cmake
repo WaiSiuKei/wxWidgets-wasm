@@ -1945,7 +1945,6 @@ set(DFB_LOWLEVEL_HDR
 
 set(WASM_LOWLEVEL_SRC
     src/generic/caret.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/paletteg.cpp
     src/generic/regiong.cpp

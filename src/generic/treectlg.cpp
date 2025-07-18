@@ -966,9 +966,6 @@ void wxGenericTreeCtrl::Init()
     m_indent = 0;
     m_spacing = 0;
 
-    m_imageListButtons = nullptr;
-    m_ownsImageListButtons = false;
-
     m_dragCount = 0;
     m_isDragging = false;
     m_dropTarget = m_oldSelection = nullptr;

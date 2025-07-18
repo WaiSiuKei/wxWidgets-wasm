@@ -64,18 +64,18 @@ const int DEFAULT_DEPTH = 32;
 class wxDisplayImplSingleWasm : public wxDisplayImplSingle
 {
 public:
-    virtual wxRect GetGeometry() const wxOVERRIDE
+    virtual wxRect GetGeometry() const override
     {
         wxSize screenSize = wxTheApp->GetDisplay()->GetScreenSize();
         return wxRect(0, 0, screenSize.x, screenSize.y);
     }
 
-    virtual int GetDepth() const wxOVERRIDE
+    virtual int GetDepth() const override
     {
         return DEFAULT_DEPTH;
     }
 
-    virtual wxSize GetPPI() const wxOVERRIDE
+    virtual wxSize GetPPI() const override
     {
         // CSS reference pixel size is 1/96 in
         // see http://www.w3.org/TR/css3-values/#reference-pixel

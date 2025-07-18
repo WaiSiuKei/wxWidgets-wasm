@@ -26,8 +26,8 @@
 namespace
 {
 
-wxDropSource *g_dropSource = NULL;
-wxDataObject *g_dataObject = NULL;
+wxDropSource *g_dropSource = nullptr;
+wxDataObject *g_dataObject = nullptr;
 
 wxCursor defaultDragNoneCursor(26);
 wxCursor defaultDragCopyCursor(27);
@@ -39,9 +39,9 @@ wxDropSource::wxDropSource(wxWindow *WXUNUSED(win),
                            const wxCursor &copy,
                            const wxCursor &move,
                            const wxCursor &none)
-    : wxDropSourceBase(copy, move, none),
+    : wxDropSourceBase(wxCursorBundle(copy), wxCursorBundle(move), wxCursorBundle(none)),
       m_dropFlags(0),
-      m_overWindow(NULL),
+      m_overWindow(nullptr),
       m_lastMouseEventValid(false)
 {
 }
@@ -65,7 +65,7 @@ void wxDropSource::StartDrag()
     m_overWindow = wxTheApp->GetMouseWindow(m_startPosition);
 
     wxDragResult desiredResult = wxDragNone;
-    if (m_overWindow != NULL && m_overWindow->GetDropTarget() != NULL)
+    if (m_overWindow != nullptr && m_overWindow->GetDropTarget() != nullptr)
     {
         desiredResult = m_overWindow->GetDropTarget()->OnEnter(
                             m_startPosition.x,
@@ -80,8 +80,8 @@ void wxDropSource::EndDrag(wxDragResult result)
 {
     wxASSERT(IsDragInProgress());
 
-    g_dropSource = NULL;
-    g_dataObject = NULL;
+    g_dropSource = nullptr;
+    g_dataObject = nullptr;
 
     wxSetCursor(m_startCursor);
 
@@ -97,17 +97,17 @@ void wxDropSource::EndDrag(wxDragResult result)
     }
 
     m_lastMouseEventValid = false;
-    m_overWindow = NULL;
+    m_overWindow = nullptr;
 
     OnDragResult(result);
 }
 
 const wxCursor& wxDropSource::GetCursor(wxDragResult res) const
 {
-    const wxCursor& cursor = wxDropSourceBase::GetCursor(res);
+    const wxCursorBundle& cursor = wxDropSourceBase::GetCursorBundle(res);
 
     // If cursor not set, use default.
-    if (cursor.IsSameAs(wxNullCursor))
+    if (cursor.IsSameAs(wxCursorBundle(wxNullCursor)))
     {
         switch (res)
         {
@@ -122,7 +122,7 @@ const wxCursor& wxDropSource::GetCursor(wxDragResult res) const
                 break;
         }
     }
-    return cursor;
+    return m_overWindow == nullptr ? cursor.GetCursorForMainWindow() : cursor.GetCursorFor(m_overWindow);
 }
 
 bool wxDropSource::UseAlternateResult()
@@ -151,7 +151,7 @@ void wxDropSource::UpdateDesiredDragResult(wxDragResult desiredResult)
     GiveFeedback(desiredResult);
 
     m_desiredResult = desiredResult;
-    wxCursor cursor = GetCursor(desiredResult);
+    wxCursorBundle cursor = GetCursorBundle(desiredResult);
     wxSetCursor(cursor);
 }
 
@@ -165,7 +165,7 @@ bool wxDropSource::HandleMouseEvent(wxMouseEvent *event, wxDragResult *result)
     wxPoint mousePosition = event->GetPosition();
     wxWindow *window = wxTheApp->GetMouseWindow(mousePosition);
     wxPoint clientMousePosition =
-        window != NULL ? window->ScreenToClient(mousePosition) : mousePosition;
+        window != nullptr ? window->ScreenToClient(mousePosition) : mousePosition;
 
     wxTheApp->UpdateMouseState(*event);
 
@@ -175,7 +175,7 @@ bool wxDropSource::HandleMouseEvent(wxMouseEvent *event, wxDragResult *result)
     if (window != m_overWindow)
     {
         //printf("drop window changed\n");
-        if (m_overWindow != NULL && m_overWindow->GetDropTarget() != NULL)
+        if (m_overWindow != nullptr && m_overWindow->GetDropTarget() != nullptr)
         {
             m_overWindow->GetDropTarget()->OnLeave();
         }
@@ -183,7 +183,7 @@ bool wxDropSource::HandleMouseEvent(wxMouseEvent *event, wxDragResult *result)
 
         wxDragResult desiredResult = wxDragNone;
 
-        if (m_overWindow != NULL && m_overWindow->GetDropTarget() != NULL)
+        if (m_overWindow != nullptr && m_overWindow->GetDropTarget() != nullptr)
         {
             desiredResult = m_overWindow->GetDropTarget()->OnEnter(
                                 clientMousePosition.x,
@@ -205,7 +205,7 @@ bool wxDropSource::HandleMouseEvent(wxMouseEvent *event, wxDragResult *result)
 
     if (event->GetEventType() == wxEVT_MOTION)
     {
-        if (m_overWindow != NULL && m_overWindow->GetDropTarget() != NULL)
+        if (m_overWindow != nullptr && m_overWindow->GetDropTarget() != nullptr)
         {
             wxDragResult desiredResult = m_overWindow->GetDropTarget()->OnDragOver(
                                              clientMousePosition.x,
@@ -227,8 +227,8 @@ bool wxDropSource::HandleMouseEvent(wxMouseEvent *event, wxDragResult *result)
 
     if (!event->LeftIsDown())
     {
-        if (m_overWindow != NULL &&
-            m_overWindow->GetDropTarget() != NULL &&
+        if (m_overWindow != nullptr &&
+            m_overWindow->GetDropTarget() != nullptr &&
             m_desiredResult != wxDragNone)
         {
             bool accept = m_overWindow->GetDropTarget()->OnDrop(
@@ -286,7 +286,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 /* static */
 bool wxDropSource::IsDragInProgress()
 {
-    return g_dropSource != NULL;
+    return g_dropSource != nullptr;
 }
 
 /* static */
@@ -314,7 +314,7 @@ wxDropTarget::wxDropTarget(wxDataObject *WXUNUSED(dataObject))
 wxDataFormat wxDropTarget::GetMatchingPair()
 {
     wxDataFormat supported(wxDF_INVALID);
-    if (m_dataObject != NULL)
+    if (m_dataObject != nullptr)
     {
         if (g_dropSource)
         {
@@ -332,7 +332,7 @@ wxDataFormat wxDropTarget::GetMatchingPair()
 
 bool wxDropTarget::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 {
-    if (g_dataObject == NULL)
+    if (g_dataObject == nullptr)
     {
         return false;
     }
@@ -348,7 +348,7 @@ wxDragResult wxDropTarget::OnData(wxCoord WXUNUSED(x),
 
 bool wxDropTarget::GetData()
 {
-    if (m_dataObject == NULL || g_dataObject == NULL)
+    if (m_dataObject == nullptr || g_dataObject == nullptr)
     {
         return false;
     }

@@ -120,7 +120,7 @@ void wxWasmDCImpl::SetPen(const wxPen& pen)
         if (m_pen.GetStyle() == wxPENSTYLE_STIPPLE)
         {
             wxBitmap *stippleBitmap = m_pen.GetStipple();
-            wxASSERT_MSG(stippleBitmap != NULL, "stipple pen without bitmap");
+            wxASSERT_MSG(stippleBitmap != nullptr, "stipple pen without bitmap");
 
             stippleBitmap->SyncToJs();
             bitmapId = stippleBitmap->GetJavascriptId();
@@ -148,7 +148,7 @@ void wxWasmDCImpl::SetBrush(const wxBrush& brush)
     if (m_brush.GetStyle() == wxBRUSHSTYLE_STIPPLE)
     {
         wxBitmap *stippleBitmap = m_brush.GetStipple();
-        wxASSERT_MSG(stippleBitmap != NULL, "stipple brush without bitmap");
+        wxASSERT_MSG(stippleBitmap != nullptr, "stipple brush without bitmap");
 
         stippleBitmap->SyncToJs();
         bitmapId = stippleBitmap->GetJavascriptId();
@@ -173,14 +173,14 @@ void wxWasmDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 wxCoord wxWasmDCImpl::GetCharWidth() const
 {
     wxCoord charWidth;
-    m_font.GetCharSize(&charWidth, NULL);
+    m_font.GetCharSize(&charWidth, nullptr);
     return charWidth;
 }
 
 wxCoord wxWasmDCImpl::GetCharHeight() const
 {
     wxCoord charHeight;
-    m_font.GetCharSize(NULL, &charHeight);
+    m_font.GetCharSize(nullptr, &charHeight);
     return charHeight;
 }
 
@@ -190,7 +190,7 @@ void wxWasmDCImpl::DoGetTextExtent(const wxString& string,
                                    wxCoord *externalLeading,
                                    const wxFont *theFont) const
 {
-    const wxFont *font = theFont != NULL ? theFont : &m_font;
+    const wxFont *font = theFont != nullptr ? theFont : &m_font;
     font->GetTextExtent(string, x, y, descent, externalLeading);
 }
 

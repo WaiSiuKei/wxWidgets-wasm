@@ -56,7 +56,7 @@ bool          wxConfigBase::ms_bAutoCreate = true;
 
 wxConfigBase *wxAppTraitsBase::CreateConfig()
 {
-#if defined(__WXWASM__) && defined(wxHAS_CONFIG_AS_REGCONFIG)
+#if defined(__WXWASM__) && wxUSE_CONFIG_NATIVE
     return new wxLocalStorageConfig(wxTheApp->GetAppName());
 #elif defined(wxHAS_CONFIG_AS_REGCONFIG)
     return new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());

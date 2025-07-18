@@ -236,6 +236,10 @@ wxCursor::wxCursor(const wxString& filename,
 
     InitFromImage(img);
 }
+wxCursor::wxCursor(const wxBitmap& bitmap, int hotSpotX, int hotSpotY)
+{
+    m_refData = new wxCursorRefData(bitmap, hotSpotX, hotSpotY);
+}
 #endif
 
 wxCursor::wxCursor(const char WXUNUSED(bits)[],

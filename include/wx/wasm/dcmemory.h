@@ -27,11 +27,11 @@ public:
 
     virtual ~wxMemoryDCImpl(void);
 
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
-    virtual void DoSelect(const wxBitmap& WXUNUSED(bmp)) wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
+    virtual void DoSelect(const wxBitmap& WXUNUSED(bmp)) override;
 
-    virtual const wxBitmap& GetSelectedBitmap() const wxOVERRIDE { return m_bitmap; }
-    virtual wxBitmap& GetSelectedBitmap() wxOVERRIDE { return m_bitmap; }
+    virtual const wxBitmap& GetSelectedBitmap() const override { return m_bitmap; }
+    virtual wxBitmap& GetSelectedBitmap() override { return m_bitmap; }
 
 protected:
     void Init();

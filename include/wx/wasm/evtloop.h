@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/wasm/evtloop.h
-// Purpose:     
+// Purpose:
 // Author:      Adam Hilss
 // Copyright:   (c) 2019 Adam Hilss
 // Licence:     LGPL v2
@@ -30,6 +30,7 @@ public:
 
 protected:
     virtual int DoRun();
+    virtual void DoStop(int rc);
     virtual void DoYieldFor(long eventsToProcess);
 
 private:

@@ -36,10 +36,10 @@ public:
 
     virtual ~wxNonOwnedWindow();
 
-    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
 
-    virtual void Raise() wxOVERRIDE;
-    virtual void Lower() wxOVERRIDE;
+    virtual void Raise() override;
+    virtual void Lower() override;
 
     virtual void SetSizer(wxSizer *sizer, bool deleteOld = true);
 
@@ -54,7 +54,7 @@ public:
 protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+                           int sizeFlags = wxSIZE_AUTO) override;
 
     virtual void OnAnimationFrame() {}
 

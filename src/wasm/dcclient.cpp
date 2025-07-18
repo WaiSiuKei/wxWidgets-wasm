@@ -138,6 +138,11 @@ wxClientDCImpl::~wxClientDCImpl(void)
 {
 }
 
+bool wxClientDCImpl::CanBeUsedForDrawing(const wxWindow* WXUNUSED(window))
+{
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // wxPaintDCImpl
 // ----------------------------------------------------------------------------

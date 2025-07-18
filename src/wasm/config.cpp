@@ -281,7 +281,7 @@ bool wxLocalStorageConfig::HasEntry(const wxString& key) const
 
 bool wxLocalStorageConfig::DoReadString(const wxString& key, wxString *pstr) const
 {
-    wxCHECK_MSG(pstr, false, wxT("wxLocalStorageConfig::Read(): NULL param"));
+    wxCHECK_MSG(pstr, false, wxT("wxLocalStorageConfig::Read(): nullptr param"));
 
     const wxString entryKey = MakeEntryKey(key);
     const char *keyCStr = static_cast<const char*>((entryKey).mb_str(wxConvUTF8));
@@ -319,7 +319,7 @@ bool wxLocalStorageConfig::DoReadString(const wxString& key, wxString *pstr) con
 
 bool wxLocalStorageConfig::DoReadLong(const wxString& key, long *pl) const
 {
-    wxCHECK_MSG(pl, false, wxT("wxLocalStorageConfig::Read(): NULL param"));
+    wxCHECK_MSG(pl, false, wxT("wxLocalStorageConfig::Read(): nullptr param"));
 
     wxString str;
     if (!Read(key, &str))
@@ -330,7 +330,7 @@ bool wxLocalStorageConfig::DoReadLong(const wxString& key, long *pl) const
 
 bool wxLocalStorageConfig::DoReadBool(const wxString& key, bool *pb) const
 {
-    wxCHECK_MSG(pb, false, wxT("wxLocalStorageConfig::Read(): NULL param"));
+    wxCHECK_MSG(pb, false, wxT("wxLocalStorageConfig::Read(): nullptr param"));
 
     wxString value;
 
@@ -363,7 +363,7 @@ bool wxLocalStorageConfig::DoReadBool(const wxString& key, bool *pb) const
 #if wxUSE_BASE64
 bool wxLocalStorageConfig::DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const
 {
-    wxCHECK_MSG(buf, false, wxT("NULL buffer"));
+    wxCHECK_MSG(buf, false, wxT("nullptr buffer"));
 
     wxString value;
     if (!Read(key, &value))

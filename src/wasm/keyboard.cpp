@@ -11,6 +11,7 @@
 #include "wx/event.h"
 #include "wx/log.h"
 #include "wx/utils.h"
+#include "wx/hashmap.h"
 
 #include <emscripten/html5.h>
 
@@ -149,7 +150,7 @@ const KeyTranslationEntry kKeyTranslationEntries[] =
 
 const int kNumKeyTranslationEntries = sizeof(kKeyTranslationEntries) / sizeof(kKeyTranslationEntries[0]);
 
-WX_DECLARE_HASH_MAP(char *, long, wxStringHash, wxStringEqual, KeyTranslationMap);
+WX_DECLARE_HASH_MAP(const char *, long, wxStringHash, wxStringEqual, KeyTranslationMap);
 
 KeyTranslationMap *CreateKeyTranslationMap()
 {
@@ -175,9 +176,9 @@ KeyTranslationMap *CreateKeyTranslationMap()
 
 const KeyTranslationMap &GetKeyTranslationMap()
 {
-    static KeyTranslationMap *keyTranslationMap = NULL;
+    static KeyTranslationMap *keyTranslationMap = nullptr;
 
-    if (keyTranslationMap == NULL)
+    if (keyTranslationMap == nullptr)
     {
         keyTranslationMap = CreateKeyTranslationMap();
     }

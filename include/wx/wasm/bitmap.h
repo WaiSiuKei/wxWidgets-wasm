@@ -25,6 +25,7 @@ public:
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
+    wxBitmap(const wxImage& image, const wxDC& dc);
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
@@ -57,7 +58,7 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
-                          const wxPalette *palette = NULL) const;
+                          const wxPalette *palette = nullptr) const;
     virtual bool LoadFile(const wxString &name, wxBitmapType type);
 
     virtual void* GetRawData(wxPixelDataBase& data, int bpp);

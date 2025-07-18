@@ -22,6 +22,10 @@ dnl sets build, host variables and the same with _alias
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
+AC_MSG_NOTICE([build=$build])
+AC_MSG_NOTICE([host=$host])
+AC_MSG_NOTICE([cross_compiling=$cross_compiling])
+
 dnl notice that if --host was given but --build was not, cross_compiling is
 dnl only set to "maybe" and not "yes" and will be either set to "yes" later or
 dnl configure will exit with error in AC_PROG_CC so don't test for = "yes" here
@@ -3263,7 +3267,7 @@ installed, where VER is 2, 3 or 4.
 
     if test "$wxUSE_WASM" = 1; then
         TOOLKIT=WASM
-        GUI_TK_LIBRARY="-lpng"
+        GUI_TK_LIBRARY=""
         LIBS="$LIBS -lz -lpthread"
     fi
 
