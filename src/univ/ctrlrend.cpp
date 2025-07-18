@@ -2,7 +2,6 @@
 // Name:        src/univ/ctrlrend.cpp
 // Purpose:     wxControlRenderer implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     15.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -69,12 +68,12 @@ void wxControlRenderer::DrawLabel()
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 
-    if ( !m_window->GetLabel().empty() )
+    wxControl *ctrl = wxStaticCast(m_window, wxControl);
+    wxString label = ctrl->GetLabelText();
+    if ( !label.empty() )
     {
-        wxControl *ctrl = wxStaticCast(m_window, wxControl);
-
         m_renderer->DrawLabel(m_dc,
-                              ctrl->GetLabelText(),
+                              label,
                               m_rect,
                               m_window->GetStateFlags(),
                               ctrl->GetAlignment(),
@@ -89,7 +88,10 @@ void wxControlRenderer::DrawButtonLabel(const wxBitmap& bitmap,
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 
-    if ( !m_window->GetLabel().empty() || bitmap.IsOk() )
+    wxControl *ctrl = wxStaticCast(m_window, wxControl);
+    wxString label = ctrl->GetLabelText();
+
+    if ( !label.empty() || bitmap.IsOk() )
     {
         wxRect rectLabel = m_rect;
         if ( bitmap.IsOk() )
@@ -97,10 +99,8 @@ void wxControlRenderer::DrawButtonLabel(const wxBitmap& bitmap,
             rectLabel.Inflate(-marginX, -marginY);
         }
 
-        wxControl *ctrl = wxStaticCast(m_window, wxControl);
-
         m_renderer->DrawButtonLabel(m_dc,
-                                    ctrl->GetLabelText(),
+                                    label,
                                     bitmap,
                                     rectLabel,
                                     m_window->GetStateFlags(),
@@ -183,7 +183,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
     {
         if ( alignment & wxALIGN_RIGHT )
         {
-            x = rect.GetRight() - width;
+            x = rect.GetRight() - width + 1;
         }
         else if ( alignment & wxALIGN_CENTRE )
         {
@@ -196,7 +196,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
 
         if ( alignment & wxALIGN_BOTTOM )
         {
-            y = rect.GetBottom() - height;
+            y = rect.GetBottom() - height + 1;
         }
         else if ( alignment & wxALIGN_CENTRE_VERTICAL )
         {
@@ -221,6 +221,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
     wxRegion rgnUpdate = scrollbar->GetUpdateRegion();
 
     {
+#if wxUSE_LOG_TRACE
         wxRect rectUpdate = rgnUpdate.GetBox();
         wxLogTrace(wxT("scrollbar"),
                    wxT("%s redraw: update box is (%d, %d)-(%d, %d)"),
@@ -229,6 +230,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                    rectUpdate.GetTop(),
                    rectUpdate.GetRight(),
                    rectUpdate.GetBottom());
+#endif // wxUSE_LOG_TRACE
 
 #if 0 //def WXDEBUG_SCROLLBAR
         static bool s_refreshDebug = false;

@@ -2,7 +2,6 @@
 // Name:        samples/menu.cpp
 // Purpose:     wxMenu/wxMenuBar sample
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.11.99
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -23,8 +22,6 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/bitmap.h"
-    #include "wx/filehistory.h"
-    #include "wx/filename.h"
     #include "wx/frame.h"
     #include "wx/image.h"
     #include "wx/menu.h"
@@ -34,6 +31,10 @@
     #include "wx/textdlg.h"
 #endif
 
+#include "wx/artprov.h"
+#include "wx/filehistory.h"
+#include "wx/filename.h"
+
 #if !wxUSE_MENUS
     // nice try...
     #error "menu sample requires wxUSE_MENUS=1"
@@ -41,7 +42,7 @@
 
 // not all ports have support for EVT_CONTEXT_MENU yet, don't define
 // USE_CONTEXT_MENU for those which don't
-#if defined(__WXMOTIF__) || defined(__WXX11__)
+#if defined(__WXX11__)
     #define USE_CONTEXT_MENU 0
 #else
     #define USE_CONTEXT_MENU 1
@@ -55,8 +56,6 @@
     #define USE_LOG_WINDOW 0
 #endif
 
-#include "copy.xpm"
-
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
@@ -69,7 +68,7 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Define a new frame
@@ -175,7 +174,7 @@ private:
 
     wxMenuItem *GetLastMenuItem() const;
 
-    // the menu previously detached from the menubar (may be NULL)
+    // the menu previously detached from the menubar (may be null)
     wxMenu *m_menu;
 
     // the count of dummy menus already created
@@ -466,16 +465,16 @@ bool MyApp::OnInit()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame((wxFrame *)NULL, wxID_ANY, "wxWidgets menu sample")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets menu sample")
 {
     SetIcon(wxICON(sample));
 
 #if USE_LOG_WINDOW
-    m_textctrl = NULL;
+    m_textctrl = nullptr;
 #endif
-    m_menu = NULL;
+    m_menu = nullptr;
     m_countDummy = 0;
-    m_logOld = NULL;
+    m_logOld = nullptr;
 
 #if wxUSE_STATUSBAR
     CreateStatusBar();
@@ -558,7 +557,7 @@ MyFrame::MyFrame()
 #if USE_LOG_WINDOW
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
                                       "Clear &log\tCtrl-L");
-    item->SetBitmap(copy_xpm);
+    item->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_DELETE, wxART_MENU));
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
 #endif // USE_LOG_WINDOW
@@ -573,17 +572,9 @@ MyFrame::MyFrame()
     m_fileHistory = new wxFileHistory();
     m_fileHistory->UseMenu(m_fileHistoryMenu);
 
-    wxFileName fn( "menu.cpp" );
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
-
-    fn = "Makefile.in";
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
-
-    fn.Assign("minimal", "minimal", "cpp");
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+    m_fileHistory->AddFileToHistory( wxFileName("menu.cpp").GetAbsolutePath() );
+    m_fileHistory->AddFileToHistory( wxFileName("Makefile.in").GetAbsolutePath() );
+    m_fileHistory->AddFileToHistory( wxFileName("minimal", "minimal", "cpp").GetAbsolutePath() );
 
     fileMenu->AppendSubMenu(m_fileHistoryMenu, "Sample file history");
 #endif
@@ -779,14 +770,14 @@ wxMenuItem *MyFrame::GetLastMenuItem() const
 {
     wxMenuBar *menubar = GetMenuBar();
     wxMenu *menu = menubar->GetMenu(menubar->FindMenu("Test"));
-    wxCHECK_MSG( menu, NULL, "no 'Test' menu?" );
+    wxCHECK_MSG( menu, nullptr, "no 'Test' menu?" );
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetLast();
     if ( !node )
     {
         wxLogWarning("No last item in the 'Test' menu!");
 
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -895,7 +886,7 @@ void MyFrame::OnToggleMenu(wxCommandEvent& WXUNUSED(event))
     {
         // restore it
         mbar->Insert(0, m_menu, "&File");
-        m_menu = NULL;
+        m_menu = nullptr;
     }
 }
 
@@ -994,7 +985,7 @@ void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
     wxCHECK_RET( menu, "no 'Test' menu?" );
 
     menu->Append(Menu_Dummy_Last, "&Dummy sub menu",
-                 CreateDummyMenu(NULL), "Dummy sub menu help");
+                 CreateDummyMenu(nullptr), "Dummy sub menu help");
 }
 
 void MyFrame::OnDeleteMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -1249,13 +1240,14 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
     else // normal case, shift not pressed
     {
         menu.Append(Menu_Help_About, "&About");
-        menu.Append(Menu_Popup_Submenu, "&Submenu", CreateDummyMenu(NULL));
+        menu.Append(Menu_Popup_Submenu, "&Submenu", CreateDummyMenu(nullptr));
         menu.Append(Menu_Popup_ToBeDeleted, "To be &deleted");
         menu.AppendCheckItem(Menu_Popup_ToBeChecked, "To be &checked");
         menu.Append(Menu_Popup_ToBeGreyed, "To be &greyed",
                     "This menu item should be initially greyed out");
         menu.AppendSeparator();
-        menu.Append(Menu_File_Quit, "E&xit");
+        menu.Append(Menu_File_Quit, "E&xit")
+            ->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_QUIT, wxART_MENU));
 
         menu.Delete(Menu_Popup_ToBeDeleted);
         menu.Check(Menu_Popup_ToBeChecked, true);

@@ -2,7 +2,6 @@
 // Name:        src/univ/themes/gtk.cpp
 // Purpose:     wxUniversal theme implementing GTK-like LNF
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -84,7 +83,7 @@ public:
                                 wxBorder border,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxRect *rectIn = NULL);
+                                wxRect *rectIn = nullptr);
     virtual void DrawButtonLabel(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& image,
@@ -96,7 +95,7 @@ public:
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
-                                  wxRect *rectIn = NULL);
+                                  wxRect *rectIn = nullptr);
     virtual void DrawArrow(wxDC& dc,
                            wxDirection dir,
                            const wxRect& rect,
@@ -146,7 +145,7 @@ public:
                                  wxOrientation orient,
                                  int flags = 0,
                                  long style = 0,
-                                 wxRect *rectShaft = NULL);
+                                 wxRect *rectShaft = nullptr);
     virtual void DrawSliderThumb(wxDC& dc,
                                  const wxRect& rect,
                                  wxOrientation orient,
@@ -333,7 +332,7 @@ protected:
                         int indexAccel,
                         const wxString& accel = wxEmptyString,
                         const wxBitmap& bitmap = wxNullBitmap,
-                        const wxGTKMenuGeometryInfo *geometryInfo = NULL);
+                        const wxGTKMenuGeometryInfo *geometryInfo = nullptr);
 
     // initialize the combo bitmaps
     void InitComboBitmaps();
@@ -528,9 +527,9 @@ WX_IMPLEMENT_THEME(wxGTKTheme, gtk, wxTRANSLATE("GTK+ theme"));
 
 wxGTKTheme::wxGTKTheme()
 {
-    m_scheme = NULL;
-    m_renderer = NULL;
-    m_artProvider = NULL;
+    m_scheme = nullptr;
+    m_renderer = nullptr;
+    m_artProvider = nullptr;
 }
 
 wxGTKTheme::~wxGTKTheme()
@@ -572,7 +571,7 @@ wxColourScheme *wxGTKTheme::GetColourScheme()
 wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control,
                                             wxInputConsumer *consumer)
 {
-    wxInputHandler *handler = NULL;
+    wxInputHandler *handler = nullptr;
     int n = m_handlerNames.Index(control);
     if ( n == wxNOT_FOUND )
     {
@@ -826,14 +825,10 @@ void wxGTKRenderer::DrawTextBorder(wxDC& dc,
 
     if ( border != wxBORDER_NONE )
     {
+        DrawRect(dc, &rect, m_penBlack);
         if ( flags & wxCONTROL_FOCUSED )
         {
-            DrawRect(dc, &rect, m_penBlack);
             DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-        }
-        else // !focused
-        {
-            DrawInnerShadedRect(dc, &rect);
         }
     }
 
@@ -937,7 +932,7 @@ void wxGTKRenderer::DrawUndeterminedBitmap(wxDC& dc,
                                            bool isPressed)
 {
     // FIXME: For sure it is not GTK look but it is better than nothing.
-    // Show me correct look and I will immediatelly make it better (ABX)
+    // Show me correct look and I will immediately make it better (ABX)
     wxRect rect = rectTotal;
 
     wxColour col1, col2;
@@ -1085,7 +1080,7 @@ wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
         dc.SelectObject(m_bitmapsCheckbox[0][1]);
         DrawUncheckBitmap(dc, rect, false);
 
-        // normal undeterminated
+        // normal undetermined
         dc.SelectObject(m_bitmapsCheckbox[0][2]);
         DrawUndeterminedBitmap(dc, rect, false);
 
@@ -1096,7 +1091,7 @@ wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
         dc.SelectObject(m_bitmapsCheckbox[1][1]);
         DrawUncheckBitmap(dc, rect, true);
 
-        // pressed undeterminated
+        // pressed undetermined
         dc.SelectObject(m_bitmapsCheckbox[1][2]);
         DrawUndeterminedBitmap(dc, rect, true);
     }
@@ -1678,6 +1673,7 @@ void wxGTKRenderer::DoDrawMenuItem(wxDC& dc,
 
         if ( bmp.IsOk() )
         {
+            rect.x = MENU_BMP_MARGIN;
             rect.SetRight(geometryInfo->GetLabelOffset());
             wxControlRenderer::DrawBitmap(dc, bmp, rect);
         }
@@ -1740,7 +1736,7 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
                                                    const wxMenu& menu) const
 {
     // prepare the dc: for now we draw all the items with the system font
-    wxClientDC dc(win);
+    wxInfoDC dc(win);
     dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // the height of a normal item
@@ -1776,17 +1772,27 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
             h = heightText;
 
             wxCoord widthLabel;
-            dc.GetTextExtent(item->GetItemLabelText(), &widthLabel, NULL);
+            dc.GetTextExtent(item->GetItemLabelText(), &widthLabel, nullptr);
             if ( widthLabel > widthLabelMax )
             {
                 widthLabelMax = widthLabel;
             }
 
             wxCoord widthAccel;
-            dc.GetTextExtent(item->GetAccelString(), &widthAccel, NULL);
+            dc.GetTextExtent(item->GetAccelString(), &widthAccel, nullptr);
             if ( widthAccel > widthAccelMax )
             {
                 widthAccelMax = widthAccel;
+            }
+
+            if ( item->IsCheckable() )
+            {
+                wxCoord width = GetCheckBitmapSize().x;
+                if ( width > widthBmpMax )
+                    widthBmpMax = width;
+                width = GetRadioBitmapSize().x;
+                if ( width > widthBmpMax )
+                    widthBmpMax = width;
             }
 
             const wxBitmap& bmp = item->GetBitmap();
@@ -1815,7 +1821,7 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
     gi->m_ofsAccel = gi->m_ofsLabel + widthLabelMax;
     if ( widthAccelMax > 0 )
     {
-        // if we actually have any accesl, add a margin
+        // if we actually have any accels, add a margin
         gi->m_ofsAccel += MENU_ACCEL_MARGIN;
     }
 
@@ -2594,11 +2600,11 @@ bool wxGTKInputHandler::HandleMouseMove(wxInputConsumer *control,
 {
     if ( event.Entering() )
     {
-        control->GetInputWindow()->SetCurrent(true);
+        control->GetInputWindow()->WXMakeCurrent(true);
     }
     else if ( event.Leaving() )
     {
-        control->GetInputWindow()->SetCurrent(false);
+        control->GetInputWindow()->WXMakeCurrent(false);
     }
     else
     {

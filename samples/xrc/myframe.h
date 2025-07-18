@@ -30,7 +30,7 @@ class MyFrame : public wxFrame
 public:
 
     // Constructor.
-    MyFrame( wxWindow* parent=(wxWindow *)NULL);
+    MyFrame( wxWindow* parent=nullptr);
 
 private:
 
@@ -43,6 +43,7 @@ private:
     void OnDerivedDialogToolOrMenuCommand(wxCommandEvent& event);
     void OnControlsToolOrMenuCommand(wxCommandEvent& event);
     void OnUncenteredToolOrMenuCommand(wxCommandEvent& event);
+    void OnMultipleAccels(wxCommandEvent& event);
     void OnAuiDemoToolOrMenuCommand(wxCommandEvent& event);
     void OnObjRefToolOrMenuCommand(wxCommandEvent& event);
     void OnCustomClassToolOrMenuCommand(wxCommandEvent& event);

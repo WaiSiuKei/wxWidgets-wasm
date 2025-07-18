@@ -37,7 +37,7 @@
 
 //-----------------------------------------------------------------------------
 
-#include "wx/xrc/xmlres.h"              // XRC XML resouces
+#include "wx/xrc/xmlres.h"              // XRC XML resources
 
 //-----------------------------------------------------------------------------
 
@@ -84,6 +84,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand)
     EVT_MENU(XRCID("controls_tool_or_menuitem"), MyFrame::OnControlsToolOrMenuCommand)
     EVT_MENU(XRCID("uncentered_tool_or_menuitem"), MyFrame::OnUncenteredToolOrMenuCommand)
+    EVT_MENU(XRCID("multiple_accels"), MyFrame::OnMultipleAccels)
     EVT_MENU(XRCID("aui_demo_tool_or_menuitem"), MyFrame::OnAuiDemoToolOrMenuCommand)
     EVT_MENU(XRCID("obj_ref_tool_or_menuitem"), MyFrame::OnObjRefToolOrMenuCommand)
     EVT_MENU(XRCID("custom_class_tool_or_menuitem"), MyFrame::OnCustomClassToolOrMenuCommand)
@@ -103,10 +104,10 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame(wxWindow* parent)
 {
     // Load up this frame from XRC. [Note, instead of making a class's
-    // constructor take a wxWindow* parent with a default value of NULL,
+    // constructor take a wxWindow* parent with a default value of nullptr,
     // we could have just had designed MyFrame class with an empty
     // constructor and then written here:
-    // wxXmlResource::Get()->LoadFrame(this, (wxWindow* )NULL, "main_frame");
+    // wxXmlResource::Get()->LoadFrame(this, nullptr, "main_frame");
     // since this frame will always be the top window, and thus parentless.
     // However, the current approach has source code that can be recycled
     // for other frames that aren't the top level window.]
@@ -285,6 +286,26 @@ void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     dlg.ShowModal();
 }
 
+void MyFrame::OnMultipleAccels(wxCommandEvent& WXUNUSED(event))
+{
+    wxString msg;
+#if defined(__WXOSX_COCOA__)
+    wxString main = "Cmd-W";
+    wxString extra1 = "Cmd-T";
+    wxString extra2 = "Shift-Cmd-W";
+#else
+    wxString main = "Ctrl-W";
+    wxString extra1 = "Ctrl-T";
+    wxString extra2 = "Shift-Ctrl-W";
+#endif
+    msg.Printf(
+        "You can open this dialog with any of '%s' (main), '%s' or '%s' (extra) accelerators.",
+        main, extra1, extra2
+    );
+
+    wxMessageBox(msg, _("Multiple accelerators demo"), wxOK | wxICON_INFORMATION, this);
+}
+
 void MyFrame::OnAuiDemoToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_AUI
@@ -299,7 +320,7 @@ void MyFrame::OnAuiDemoToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnObjRefToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     // The dialog redirects log messages, so save the old log target first
-    wxLog* oldlogtarget = wxLog::SetActiveTarget(NULL);
+    wxLog* oldlogtarget = wxLog::SetActiveTarget(nullptr);
 
     // Make an instance of the dialog
     ObjrefDialog* objrefDialog = new ObjrefDialog(this);
@@ -371,7 +392,7 @@ void MyFrame::OnRecursiveLoad(wxCommandEvent& WXUNUSED(event))
     // this is a slightly contrived example, please keep in mind that it's done
     // only to demonstrate LoadObjectRecursively() in action and is not the
     // recommended to do this
-    wxDialog dlg(NULL, wxID_ANY, "Recursive Load Example",
+    wxDialog dlg(nullptr, wxID_ANY, "Recursive Load Example",
                  wxDefaultPosition, wxDefaultSize,
                  wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     wxSizer * const sizer = new wxBoxSizer(wxVERTICAL);
@@ -427,4 +448,62 @@ void MyFrame::OnInfoBarShowMessage(wxCommandEvent& event)
     ctrl->ShowMessage("Message", wxICON_QUESTION);
 #endif
 
+}
+
+// Define the wxVListBox subclass here
+
+#include <wx/vlbox.h>
+
+class wxVListBoxDerived : public wxVListBox
+{
+public:
+    // the derived class must implement this function to actually draw the item
+    // with the given index on the provided DC
+    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const override;
+
+    // the derived class must implement this method to return the height of the
+    // specified item
+    virtual wxCoord OnMeasureItem(size_t n) const override;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxVListBoxDerived);
+    wxDECLARE_EVENT_TABLE();
+
+    /* XRC requires default constructor, and Create() is not
+        virtual, so initialization must be done here */
+    void OnCreate(wxWindowCreateEvent& event);
+
+    wxString GetItem(size_t n) const;
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxVListBoxDerived, wxVListBox);
+
+wxBEGIN_EVENT_TABLE(wxVListBoxDerived, wxVListBox)
+    EVT_WINDOW_CREATE(wxVListBoxDerived::OnCreate)
+wxEND_EVENT_TABLE()
+
+void wxVListBoxDerived::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
+{
+    dc.DrawText(GetItem(n), rect.GetLeftTop());
+}
+
+wxCoord wxVListBoxDerived::OnMeasureItem(size_t n) const
+{
+    // safe to const_cast since we're just using GetTextExtent()
+    wxInfoDC dc(const_cast<wxVListBoxDerived*>(this));
+    return dc.GetTextExtent(GetItem(n)).y;
+}
+
+/* XRC requires default constructor, and Create() is not
+    virtual, so initialization must be done here */
+void wxVListBoxDerived::OnCreate(wxWindowCreateEvent& event)
+{
+    SetItemCount(10);
+
+    event.Skip();
+}
+
+wxString wxVListBoxDerived::GetItem(size_t n) const
+{
+    return wxString::Format("Item %zu", n);
 }

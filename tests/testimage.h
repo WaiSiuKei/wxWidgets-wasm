@@ -37,7 +37,7 @@ public:
     {
     }
 
-    bool match(const wxImage& other) const wxOVERRIDE
+    bool match(const wxImage& other) const override
     {
         if ( other.GetWidth() != m_image.GetWidth() )
             return false;
@@ -63,6 +63,7 @@ public:
             }
         }
 
+        const wxString dispAlphaValNull("--");
         const unsigned char* d1 = m_image.GetData();
         const unsigned char* d2 = other.GetData();
         const unsigned char* a1 = m_image.GetAlpha();
@@ -72,8 +73,8 @@ public:
         {
             for ( int x = 0; x < m_image.GetWidth(); ++x )
             {
-                wxString a1txt = dispAlphaVal ? (a1 != NULL ? wxString::Format("%02x", *a1) : "--") : "";
-                wxString a2txt = dispAlphaVal ? (a2 != NULL ? wxString::Format("%02x", *a2) : "--") : "";
+                wxString a1txt = dispAlphaVal ? (a1 != nullptr ? wxString::Format("%02x", *a1) : dispAlphaValNull) : wxString();
+                wxString a2txt = dispAlphaVal ? (a2 != nullptr ? wxString::Format("%02x", *a2) : dispAlphaValNull) : wxString();
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -141,10 +142,10 @@ public:
         return true;
     }
 
-    std::string describe() const wxOVERRIDE
+    std::string describe() const override
     {
         std::string desc = "doesn't have the same RGB data as " +
-                                Catch::toString(m_image);
+                                Catch::StringMaker<wxImage>::convert(m_image);
 
         if ( !m_diffDesc.empty() )
             desc += + ": " + m_diffDesc.ToStdString(wxConvUTF8);
@@ -188,7 +189,7 @@ public:
     {
     }
 
-    bool match(const wxImage& other) const wxOVERRIDE
+    bool match(const wxImage& other) const override
     {
         if (!other.HasAlpha())
         {
@@ -208,7 +209,7 @@ public:
         return true;
     }
 
-    std::string describe() const wxOVERRIDE
+    std::string describe() const override
     {
         std::string desc;
 

@@ -2,7 +2,6 @@
 // Name:        src/common/config.cpp
 // Purpose:     implementation of wxConfigBase class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.04.98
 // Copyright:   (c) 1997 Karsten Ballueder  Ballueder@usa.net
 //                       Vadim Zeitlin      <zeitlin@dptmaths.ens-cachan.fr>
@@ -44,7 +43,7 @@
 // global and class static variables
 // ----------------------------------------------------------------------------
 
-wxConfigBase *wxConfigBase::ms_pConfig     = NULL;
+wxConfigBase *wxConfigBase::ms_pConfig     = nullptr;
 bool          wxConfigBase::ms_bAutoCreate = true;
 
 // ============================================================================
@@ -57,14 +56,15 @@ bool          wxConfigBase::ms_bAutoCreate = true;
 
 wxConfigBase *wxAppTraitsBase::CreateConfig()
 {
-    return new
-    #if defined(__WINDOWS__) && wxUSE_CONFIG_NATIVE
-        wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-    #elif defined(__WXWASM__) && wxUSE_CONFIG_NATIVE
-        wxLocalStorageConfig(wxTheApp->GetAppName());
-    #else // either we're under Unix or wish to use files even under Windows
-        wxFileConfig(wxTheApp->GetAppName());
-    #endif
+#if defined(__WXWASM__) && defined(wxHAS_CONFIG_AS_REGCONFIG)
+    return new wxLocalStorageConfig(wxTheApp->GetAppName());
+#elif defined(wxHAS_CONFIG_AS_REGCONFIG)
+    return new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+#elif defined(wxHAS_CONFIG_AS_FILECONFIG)
+    return new wxFileConfig(wxTheApp->GetAppName());
+#else
+    #error No wxConfig implementation defined.
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -99,9 +99,9 @@ wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 
 wxConfigBase *wxConfigBase::Create()
 {
-  if ( ms_bAutoCreate && ms_pConfig == NULL ) {
+  if ( ms_bAutoCreate && ms_pConfig == nullptr ) {
     wxAppTraits * const traits = wxApp::GetTraitsIfExists();
-    wxCHECK_MSG( traits, NULL, wxT("create wxApp before calling this") );
+    wxCHECK_MSG( traits, nullptr, wxT("create wxApp before calling this") );
 
     ms_pConfig = traits->CreateConfig();
   }
@@ -117,7 +117,7 @@ wxConfigBase *wxConfigBase::Create()
 #define IMPLEMENT_READ_FOR_TYPE(name, type, deftype, extra)                 \
     bool wxConfigBase::Read(const wxString& key, type *val) const           \
     {                                                                       \
-        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );  \
+        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );  \
                                                                             \
         if ( !DoRead##name(key, val) )                                      \
             return false;                                                   \
@@ -131,7 +131,7 @@ wxConfigBase *wxConfigBase::Create()
                             type *val,                                      \
                             deftype defVal) const                           \
     {                                                                       \
-        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );  \
+        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );  \
                                                                             \
         bool read = DoRead##name(key, val);                                 \
         if ( !read )                                                        \
@@ -190,7 +190,7 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
 
 bool wxConfigBase::Read(const wxString& key, size_t* val) const
 {
-    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
 
     SizeSameSizeAsSizeT tmp;
     if ( !Read(key, &tmp) )
@@ -202,7 +202,7 @@ bool wxConfigBase::Read(const wxString& key, size_t* val) const
 
 bool wxConfigBase::Read(const wxString& key, size_t* val, size_t defVal) const
 {
-    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
 
     if ( !Read(key, val) )
     {
@@ -216,7 +216,7 @@ bool wxConfigBase::Read(const wxString& key, size_t* val, size_t defVal) const
 // Read floats as doubles then just type cast it down.
 bool wxConfigBase::Read(const wxString& key, float* val) const
 {
-    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
 
     double temp;
     if ( !Read(key, &temp) )
@@ -234,7 +234,7 @@ bool wxConfigBase::Read(const wxString& key, float* val) const
 
 bool wxConfigBase::Read(const wxString& key, float* val, float defVal) const
 {
-    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
 
     if ( Read(key, val) )
         return true;
@@ -247,7 +247,7 @@ bool wxConfigBase::Read(const wxString& key, float* val, float defVal) const
 // but can be overridden in the derived ones
 bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
 {
-    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
 
     long l;
     if ( !DoReadLong(key, &l) )

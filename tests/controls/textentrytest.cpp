@@ -22,8 +22,9 @@
 #include "textentrytest.h"
 #include "testableframe.h"
 
-#include "wx/scopedptr.h"
 #include "wx/uiaction.h"
+
+#include <memory>
 
 void TextEntryTestCase::SetValue()
 {
@@ -51,25 +52,17 @@ void TextEntryTestCase::TextChangeEvents()
     wxTextEntry * const entry = GetTestEntry();
 
     // notice that SetValue() generates an event even if the text didn't change
-#ifndef __WXQT__
     entry->SetValue("");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
-#else
-    WARN("Events are only sent when text changes in WxQt");
-#endif
 
     entry->SetValue("foo");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
 
-#ifndef __WXQT__
     entry->SetValue("foo");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
-#else
-    WARN("Events are only sent when text changes in WxQt");
-#endif
 
     entry->SetValue("");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
@@ -464,7 +457,21 @@ private:
     void SimulateEnter()
     {
         wxUIActionSimulator sim;
+
+        // Calling SetFocus() is somehow not enough to give the focus to this
+        // window when running this test with wxGTK, apparently because the
+        // dialog itself needs to be raised to the front first, so simulate a
+        // click doing this.
+        sim.MouseMove(m_control->GetScreenPosition() + wxPoint(5, 5));
+        wxYield();
+        sim.MouseClick();
+        wxYield();
+
+        // Note that clicking it is still not enough to give it focus with
+        // wxGTK either, so we still need to call SetFocus() nevertheless: but
+        // now it works.
         m_control->SetFocus();
+
         sim.Char(WXK_RETURN);
     }
 
@@ -518,7 +525,7 @@ void TestProcessEnter(const TextLikeControlCreator& controlCreator)
 
     SECTION("Without wxTE_PROCESS_ENTER but with wxTE_MULTILINE")
     {
-        wxScopedPtr<TextLikeControlCreator>
+        std::unique_ptr<TextLikeControlCreator>
             multiLineCreator(controlCreator.CloneAsMultiLine());
         if ( !multiLineCreator )
             return;
@@ -530,7 +537,7 @@ void TestProcessEnter(const TextLikeControlCreator& controlCreator)
 
     SECTION("With wxTE_PROCESS_ENTER and wxTE_MULTILINE but skipping")
     {
-        wxScopedPtr<TextLikeControlCreator>
+        std::unique_ptr<TextLikeControlCreator>
             multiLineCreator(controlCreator.CloneAsMultiLine());
         if ( !multiLineCreator )
             return;
@@ -542,7 +549,7 @@ void TestProcessEnter(const TextLikeControlCreator& controlCreator)
 
     SECTION("With wxTE_PROCESS_ENTER and wxTE_MULTILINE without skipping")
     {
-        wxScopedPtr<TextLikeControlCreator>
+        std::unique_ptr<TextLikeControlCreator>
             multiLineCreator(controlCreator.CloneAsMultiLine());
         if ( !multiLineCreator )
             return;

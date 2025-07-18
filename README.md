@@ -1,8 +1,6 @@
 About
 -----
 
-wxWidgets-wasm is a WebAssembly port of wxWidgets.
-
 wxWidgets is a free and open source cross-platform C++ framework
 for writing advanced GUI applications using native controls.
 
@@ -18,6 +16,33 @@ You can learn more about wxWidgets at https://www.wxwidgets.org/
 and read its documentation online at https://docs.wxwidgets.org/
 
 
+Platforms
+---------
+
+[![AppVeyor](https://img.shields.io/appveyor/build/wxWidgets/wxWidgets/master?label=AppVeyor&logo=appveyor)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
+[![Unix (make)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci.yml)
+[![Unix (CMake)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_cmake.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_cmake.yml)
+[![MSW (MSVC)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_msw.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_msw.yml)
+[![MSW (gcc)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_msw_cross.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_msw_cross.yml)
+[![Mac](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_mac.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_mac.yml)
+[![OSS-Fuzz](https://oss-fuzz-build-logs.storage.googleapis.com/badges/wxwidgets.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:wxwidgets)
+
+This version of wxWidgets supports the following primary platforms:
+
+- Windows 7, 8, 10 and 11 (32/64 bit Intel and ARM64).
+- Most Unix variants using the GTK+ toolkit (version 2.6 or newer or 3.x).
+- macOS (10.10 or newer) using Cocoa under both amd64 and ARM platforms.
+
+All C++11 compilers are supported including but not limited to:
+
+- Microsoft Visual C++ 2015 or later (up to 2022).
+- g++ 4.8 or later (up to 15), including MinGW/MinGW-64/TDM under Windows.
+- Clang (up to 19/Xcode 16).
+
+Please use [3.2 branch](https://github.com/wxWidgets/wxWidgets/tree/3.2) if
+you must use wxWidgets with a C++98 compiler or support Windows XP.
+
+
 Licence
 -------
 
@@ -25,44 +50,17 @@ Licence
 is a modified version of LGPL explicitly allowing not distributing the sources
 of an application using the library even in the case of static linking.
 
-WASM sources are released under the LGPL v2 licence.
-
 
 Building
 --------
 
-git submodule update --init src/jpeg
+For building the library, please see platform-specific documentation under
+`docs/<port>` directory, e.g. here are the instructions for
+[wxGTK](docs/gtk/install.md), [wxMSW](docs/msw/install.md) and
+[wxOSX](docs/osx/install.md).
 
-git submodule update --init 3rdparty/catch
-
-export CFLAGS=-I$EMSCRIPTEN/system/local/include
-
-export CXXFLAGS=-I$EMSCRIPTEN/system/local/include
-
-export LDFLAGS=-L$EMSCRIPTEN/system/local/lib -sERROR_ON_UNDEFINED_SYMBOLS=0
-
-export CONFIGURE_ARGS="
-  --host=emscripten \
-  --with-cxx=14 \
-  --enable-utf8 \
-  --enable-universal \
-  --disable-shared \
-  --disable-exceptions \
-  --disable-richtext \
-  --without-libtiff \
-  --disable-xlocale"
-
-$EMSCRIPTEN/emconfigure $SOURCE_DIR/configure $CONFIGURE_ARGS
-
-$EMSCRIPTEN/emmake make
-
-
-Example Apps
-------------
-
-- [Life Demo](https://life.dj.app/)
-- [Transitions DJ](https://dj.app/)
-- [Wavacity Audio Editor](https://wavacity.com/)
+If you're building the sources checked out from Git, and not from a released
+version, please see these additional [Git-specific notes](README-GIT.md).
 
 
 Further information
@@ -75,7 +73,7 @@ If you are looking for community support, you can get it from
 - [#wxwidgets IRC channel](https://www.wxwidgets.org/support/irc/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/wxwidgets)
   (tag your questions with `wxwidgets`)
-- And you can report bugs at https://trac.wxwidgets.org/newticket
+- And you can report bugs at [GitHub](https://github.com/wxWidgets/wxWidgets/issues/new/choose)
 
 [Commercial support](https://www.wxwidgets.org/support/commercial/) is also
 available.
